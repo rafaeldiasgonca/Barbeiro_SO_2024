@@ -7,18 +7,24 @@ public class Main {
     public static Semaphore cortandoCabelo = new Semaphore(1);
 
     public static void main(String[] args) throws IOException {
-        // get time off waiting from args
+        Scanner scanner = new Scanner(System.in);
 
-        int  timeOffWaiting = Integer.parseInt(args[0]);
+        // Solicitar o tempo de espera do usuário
+        System.out.print("Digite o tempo de espera: ");
+        int timeOffWaiting = scanner.nextInt();
+        scanner.nextLine();  // Consumir a nova linha
 
-        // get file from args
-        String file = args[1];
+        // Solicitar o nome do arquivo do usuário
+        System.out.print("Digite o nome do arquivo: ");
+        String file = scanner.nextLine();
 
-        String quantidadeDeBarbeiros = args[2];
-        // run ler arquivo
+        // Solicitar a quantidade de barbeiros do usuário
+        System.out.print("Digite a quantidade de barbeiros ");
+        String quantidadeDeBarbeiros = scanner.nextLine();
+        //NÃO CONTER ESPAÇOS!!!!
+       
         List<List<Integer>> fila = lerArquivo(file);
 
-        // criar threads
         Thread recrutaZero = new Thread(new RecrutaZero(cortandoCabelo));
         Thread recrutaZero2 = new Thread(new RecrutaZero(cortandoCabelo));
         Thread recrutaZero3 = new Thread(new RecrutaZero(cortandoCabelo));
@@ -26,7 +32,7 @@ public class Main {
         Thread sargentoTainha = new Thread(new SargentoTainha(fila, timeOffWaiting));
         Thread tenenteEscovinha = new Thread(new TenenteEscovinha());
 
-        // run threads
+        // Executar threads de acordo com a quantidade de barbeiros selecionados
         if (quantidadeDeBarbeiros.equals("1")) {
             recrutaZero.start();
         }

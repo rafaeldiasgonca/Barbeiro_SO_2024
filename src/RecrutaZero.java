@@ -33,23 +33,20 @@ public class RecrutaZero implements Runnable {
         try {
             while (true) {
                 cortandoCabelo.acquire();
-                if (Barbearia.filaOutside == false && Barbearia.getSizeOfAllFilas() == 0) {
-                    System.out.println("Não há mais clientes para serem atendidos pelo Recruta Zero");
+                if (Barbearia.filaFora == false && Barbearia.obterTamanhoTotalFilas() == 0) {
+                   // Clientes acabaram
                     corteFinalizados = true;
                     break;
                 }
 
-                Cliente cliente = Barbearia.obterCliente();
+                Cliente cliente = Barbearia.pegarCliente();
 
                 if (cliente != null) {
                     if( tempoExtraAposDescanso > 0){ 
                         tempoMedioDeEsperaTotal +=  tempoExtraAposDescanso;
-                        System.out.println(Barbearia.getTempoMedioDeEsperaSaida());
-                        System.out.println(cliente.getEntradaFilaTimestamp());
-                        System.out.println("\nTempo médio de espera total: " + tempoMedioDeEsperaTotal);
+                        
                         // print categoria
                         
-                        System.out.println(cliente.getCategoria());
                         if (cliente.getCategoria() == 1) {
                             tempoMedioDeEsperaOficial += tempoExtraAposDescanso;
                         } else if (cliente.getCategoria() == 2) {
@@ -68,7 +65,7 @@ public class RecrutaZero implements Runnable {
 
                     
 
-                    Barbearia.setTempoMedioDeEsperaSaida(cliente.getTempoServico());
+                    Barbearia.adicionarTempoEsperaSaida(cliente.getTempoServico());
 
                     quantidadeDeAtendimentosTotal++;
                     tempoMedioDeCorteTotal += cliente.getTempoServico();
@@ -85,9 +82,8 @@ public class RecrutaZero implements Runnable {
 
                     Thread.sleep(cliente.getTempoServico());
 
-                    Barbearia.removeFromFila(cliente.getCategoria());
-                    System.out.println("Recruta Zero está cortando o cabelo de um " + cliente);
-                    System.out.println("Recruta Zero terminou de cortar o cabelo de um " + cliente);
+                    Barbearia.removerFila(cliente.getCategoria());
+                    
                 }
                 cortandoCabelo.release();
             }

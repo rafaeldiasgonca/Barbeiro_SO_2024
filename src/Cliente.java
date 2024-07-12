@@ -1,12 +1,12 @@
 class Cliente {
     private int categoria;
     private int tempoServico;
-    private long entradaFilaTimestamp; // Timestamp when the client joined the queue
+    private long entradaFilaTimestamp; // Tempo quando o cliente, seja qual for entrou na fila
 
     public Cliente(int categoria, int tempoServico) {
         this.categoria = categoria;
         this.tempoServico = tempoServico;
-        this.entradaFilaTimestamp = Barbearia.getTempoMedioDeEsperaEntrada();
+        this.entradaFilaTimestamp = Barbearia.obterTempoEsperaEntrada();
     }
 
 

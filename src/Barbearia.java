@@ -1,116 +1,107 @@
 import java.util.concurrent.*;
 
 public class Barbearia {
-    public static boolean filaOutside = true;
+    public static boolean filaFora = true;
 
     static ConcurrentLinkedQueue<Cliente> filaOficiais = new ConcurrentLinkedQueue<>();
     static ConcurrentLinkedQueue<Cliente> filaSargentos = new ConcurrentLinkedQueue<>();
     static ConcurrentLinkedQueue<Cliente> filaCabos = new ConcurrentLinkedQueue<>();
 
-
-    private static int quantidadeDeAtendimentosCabos = 0;
-    private static int quantidadeDeAtendimentosOficiais = 0;
-    private static int quantidadeDeAtendimentosSargentos = 0;
-    private static int quantidadeDeAtendimentosTotal = 0;
-    private static int quantidadeDeAtendimentosPausa = 0;
+    private static int totalAtendimentosCabos = 0;
+    private static int totalAtendimentosOficiais = 0;
+    private static int totalAtendimentosSargentos = 0;
+    private static int totalAtendimentosGeral = 0;
+    private static int totalAtendimentosPausa = 0;
     
-    private static int tempoMedioDeEsperaEntrada = 0;
-    private static int tempoMedioDeEsperaSaida = 0;
+    private static int tempoEsperaEntrada = 0;
+    private static int tempoEsperaSaida = 0;
     
-    public static synchronized int getTempoMedioDeEsperaEntrada() {
-        return tempoMedioDeEsperaEntrada;
+    public static synchronized int obterTempoEsperaEntrada() {
+        return tempoEsperaEntrada;
     }
 
-
-    public static synchronized void setTempoMedioDeEsperaEntrada(int tempoMedioDeEsperaEntrada) {
-        Barbearia.tempoMedioDeEsperaEntrada += tempoMedioDeEsperaEntrada;
+    public static synchronized void adicionarTempoEsperaEntrada(int tempoEsperaEntrada) {
+    	Barbearia.tempoEsperaEntrada += tempoEsperaEntrada;
     }
 
-    public static synchronized int getTempoMedioDeEsperaSaida() {
-        return tempoMedioDeEsperaSaida;
+    public static synchronized int obterTempoEsperaSaida() {
+        return tempoEsperaSaida;
     }
 
-    public static synchronized void setTempoMedioDeEsperaSaida(int tempoMedioDeEsperaSaida) {
-        Barbearia.tempoMedioDeEsperaSaida += tempoMedioDeEsperaSaida;
+    public static synchronized void adicionarTempoEsperaSaida(int tempoEsperaSaida) {
+    	Barbearia.tempoEsperaSaida += tempoEsperaSaida;
     }
 
-
-    public static void printFila() {
+    public static void exibirFila() {
         System.out.println("Fila Oficiais: " + filaOficiais);
         System.out.println("Fila Sargentos: " + filaSargentos);
         System.out.println("Fila Cabos: " + filaCabos);
     }
 
-    // get the size of the fila unifieds
-    public static synchronized int getSizeOfAllFilas() {
-        return filaOficiais.size() + filaSargentos.size() + filaCabos.size();   
+    public static synchronized int obterTamanhoTotalFilas() {
+        return filaOficiais.size() + filaSargentos.size() + filaCabos.size();
     }
 
-    public static synchronized int getSizeOfOficiasFila() {
+    public static synchronized int obterTamanhoFilaOficiais() {
         return filaOficiais.size();
     }
 
-    public static synchronized int getSizeOfSargentosFila() {
+    public static synchronized int obterTamanhoFilaSargentos() {
         return filaSargentos.size();
     }
 
-    public static synchronized int getSizeOfCabosFila() {
+    public static synchronized int obterTamanhoFilaCabos() {
         return filaCabos.size();
     }
 
-
-
-    // Adicionar cliente à fila correspondente
-    public static void addToFila(Cliente cliente) {
-        quantidadeDeAtendimentosTotal++;
+    public static void adicionarFila(Cliente cliente) {
+        totalAtendimentosGeral++;
         switch (cliente.getCategoria()) {
             case 0: // Pausa
-                quantidadeDeAtendimentosPausa++;
+                totalAtendimentosPausa++;
                 break;
             case 1: // Oficiais
-                if (getSizeOfAllFilas() < 20){
-
-                    quantidadeDeAtendimentosOficiais++;
+                if (obterTamanhoTotalFilas() < 20) {
+                    totalAtendimentosOficiais++;
                     filaOficiais.offer(cliente);
                 }
                 break;
             case 2: // Sargentos
-                if (getSizeOfAllFilas() < 20){
-                    quantidadeDeAtendimentosSargentos++;
+                if (obterTamanhoTotalFilas() < 20) {
+                    totalAtendimentosSargentos++;
                     filaSargentos.offer(cliente);
                 }
                 break;
             case 3: // Cabos
-                if (getSizeOfAllFilas() < 20){
-                    quantidadeDeAtendimentosCabos++;
+                if (obterTamanhoTotalFilas() < 20) {
+                    totalAtendimentosCabos++;
                     filaCabos.offer(cliente);
                 }
                 break;
         }
     }
 
-    public static synchronized int getQuantidadeDeAtendimentosTotal() {
-        return quantidadeDeAtendimentosTotal;
+    public static synchronized int obterTotalAtendimentosGeral() {
+        return totalAtendimentosGeral;
     }
 
-    public static synchronized int getQuantidadeDeAtendimentosOficiais() {
-        return quantidadeDeAtendimentosOficiais;
+    public static synchronized int obterTotalAtendimentosOficiais() {
+        return totalAtendimentosOficiais;
     }
 
-    public static synchronized int getQuantidadeDeAtendimentosSargentos() {
-        return quantidadeDeAtendimentosSargentos;
+    public static synchronized int obterTotalAtendimentosSargentos() {
+        return totalAtendimentosSargentos;
     }
 
-    public static synchronized int getQuantidadeDeAtendimentosCabos() {
-        return quantidadeDeAtendimentosCabos;
+    public static synchronized int obterTotalAtendimentosCabos() {
+        return totalAtendimentosCabos;
     }
 
-    public static synchronized int getQuantidadeDeAtendimentosPausa() {
-        return quantidadeDeAtendimentosPausa;
+    public static synchronized int obterTotalAtendimentosPausa() {
+        return totalAtendimentosPausa;
     }
 
-
-    public static synchronized void removeFromFila(int categoria) {
+    public static synchronized void removerFila(int categoria) {
         switch (categoria) {
             case 1:
                 filaOficiais.poll();
@@ -124,18 +115,17 @@ public class Barbearia {
         }
     }
 
-    public static synchronized Cliente obterCliente() {
-        // Verifica as filas em ordem de prioridade
+    public static synchronized Cliente pegarCliente() {
         if (!filaOficiais.isEmpty())
             return filaOficiais.peek();
         if (!filaSargentos.isEmpty())
             return filaSargentos.peek();
         if (!filaCabos.isEmpty())
             return filaCabos.peek();
-        return null; // Nenhum cliente para ser atendido
+        return null;
     }
 
-    public static synchronized boolean isFilaEmpty() {
+    public static synchronized boolean isFilaVazia() {
         return filaOficiais.isEmpty() && filaSargentos.isEmpty() && filaCabos.isEmpty();
     }
 }

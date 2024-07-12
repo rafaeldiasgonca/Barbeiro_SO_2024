@@ -17,39 +17,39 @@ public class SargentoTainha implements Runnable {
     @Override
     public void run() {
         try {
-            for (List<Integer> oficial : filaOutside) {  // Especifique o tipo de dados aqui
-                // cortandoCabelo.acquire();
-                // System.out.println(oficial.get(0) + " " + oficial.get(1));
+            for (List<Integer> oficial : filaOutside) {  
+                
                 if(oficial.get(0) == 0){
-                    Barbearia.addToFila(new Cliente(0, 0));
+                    Barbearia.adicionarFila(new Cliente(0, 0));
                     ocioso++;
                     if(ocioso == 3){
-                        System.out.println("Não há mais clientes para serem atendidos pelo Sargento Tainha");
-                        Barbearia.filaOutside = false;
+                      
+                        Barbearia.filaFora = false;
                         break;
+                        // Aqui o programa deve ser encerrado, pois ao sgt tainha chegou ao limite de 3
                     }
-                    System.out.println("Sargento Tainha está ocioso");
+                  
                     Thread.sleep(tempoDeDescanso);
                     continue;
                 }
                 
                 Cliente cliente = new Cliente(oficial.get(0), oficial.get(1));
-                Barbearia.setTempoMedioDeEsperaEntrada(tempoDeDescanso);
+                Barbearia.adicionarTempoEsperaEntrada(tempoDeDescanso);
 
-                if(Barbearia.getSizeOfAllFilas() < 20){
+                if(Barbearia.obterTamanhoTotalFilas() < 20){
                     ocioso = 0;
-                    Barbearia.addToFila(cliente);   
-                    System.out.println("Sargento Tainha adicionou um cliente a fila" + cliente);
+                    Barbearia.adicionarFila(cliente);   
+                  
                     started = true;
 
                 }else{
-                    System.out.println("Sargento Tainha não pode adicionar um cliente a fila");
+                   // Não adicionar clientes
                 }
                 // cortandoCabelo.release();
                 Thread.sleep(tempoDeDescanso);
             }
-            System.out.println("Não há mais clientes para serem atendidos pelo Sargento Tainha todos foram adicionados a fila");
-            Barbearia.filaOutside = false;
+    
+            Barbearia.filaFora = false;
         } catch (InterruptedException e) {
             e.printStackTrace();
         } 
